@@ -11,13 +11,15 @@ function isPalindrome(str) {
   let start = 0;
   let end = str.length - 1;
   while(start < end) {
-    while(str.charAt(start) in ["?", "," , "!", " "]){
+    while(['?', ',' , '!', ' ', '.'].includes(str.charAt(start))){
       start++;
-    }
-    while(str.charAt(end) in ["?", "," , "!", " "]){
+    } 
+    while(['?', ',' , '!', ' ', '.'].includes(str.charAt(end))){
       end--;
     }
     if(str.charAt(start) != str.charAt(end)){
+  
+      console.log(start, end);
       return false;
     }
     start++;
@@ -25,5 +27,7 @@ function isPalindrome(str) {
   }
   return true;
 }
+
+console.log(isPalindrome("race car"));
 
 module.exports = isPalindrome;
