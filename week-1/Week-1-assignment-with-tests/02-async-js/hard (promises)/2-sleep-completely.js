@@ -4,5 +4,17 @@
  */
 
 function sleep (seconds) {
+    let start = Date.now();
+    let elapsedTime = 0;
+    while(elapsedTime < seconds){
+        elapsedTime = (Date.now() - start)/1000; //milliseconds -> sec
+    }
 
 }
+
+console.log("Main thread started executing");
+
+let n = 10;
+sleep(n);
+
+console.log(`Main thread resumed after ${n} seconds`);
