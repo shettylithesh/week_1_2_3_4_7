@@ -41,9 +41,70 @@
  */
 const express = require('express');
 const bodyParser = require('body-parser');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 
+let todos = [];
 app.use(bodyParser.json());
+
+app.get('/todos', (req, res) => {
+  res.json(todos);
+})
+
+app.get('/todos/:id', (req, res) => {
+  let id = req.params.id;
+  let index= findTodo(id);
+  if(index != -1){
+    res.json(todos[index]);
+  }
+  res.status(404).send();
+})
+
+app.post('/todos', (req, res)=>{
+  let todoId = uuidv4();
+  let todo = req.body;
+  todo["id"] = todoId;
+  console.log(todo)
+  todos.push(todo);
+  res.status(201).send({"id" : todoId});
+})
+
+app.put('/todos/:id', (req, res)=>{
+  let todoId = req.params.id;
+  let todo = req.body;
+  let index = findTodo(todoId)
+  if(index != -1){
+    todos.splice(index, 1);
+    todo["id"] = todoId;
+    todos.push(todo);
+    res.status(200).send();
+  }
+  res.status(404).send();
+})
+
+app.delete('/todos/:id', (req, res) =>{
+  let todoId = req.params.id;
+  let index = findTodo(todoId)
+  if(index != -1){
+    todos.splice(index, 1);
+    res.status(200).send();
+  }
+  res.status(404).send();
+})
+
+
+function findTodo(id){
+  for(let i = 0; i < todos.length; i++){
+    if(id == todos[i]["id"]){
+      return i;
+    }
+  }
+  return -1;
+}
+// let port = 3000;
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`)
+// })
 
 module.exports = app;

@@ -33,5 +33,65 @@ const express = require("express")
 const PORT = 3000;
 const app = express();
 // write your logic here, DONT WRITE app.listen(3000) when you're running tests, the tests will automatically start the server
+const { v4: uuidv4 } = require('uuid');
+
+let users = [];
+
+app.use(express.json())
+app.post('/signup', (req, res)=>{
+  let userInfo = req.body;
+  let userName = userInfo["email"];
+
+  let index = getUser(userName);
+
+  if(index == -1){
+    let userId = uuidv4();
+    userInfo["id"] = userId;
+    users.push(userInfo);
+    res.status(201).send('Signup successful');
+  }else{
+    res.status(400).send();
+  }
+});
+
+app.post('/login', (req, res) =>{
+  let credentials = req.body;
+  let index = getUser(credentials["email"]);
+  if(index != -1 && users[index]["password"] == credentials["password"]){
+    let user = users[index];
+    user["authToken"] = uuidv4();
+    res.status(200).json(user);
+  }else{
+    res.status(401).send('Unauthorized');
+  }
+});
+//returns index of the user if user exists or else retuens -1
+app.get('/data', (req, res) =>{
+  let email = req.headers["email"];
+  let password = req.headers["password"];
+  let index = getUser(email);
+  if(index != -1 && users[index]["password"] == password){
+    res.status(200).json({"users" : users});
+  }else{
+    res.status(401).send('Unauthorized');
+  }
+});
+
+app.all('*', (req, res) => {
+  res.status(404).send('Route not found');
+});
+
+function getUser(userName){
+  for(let i = 0; i < users.length; i++){
+    if(userName == users[i]["email"]){
+      return i;
+    }
+  }
+  return -1;
+}
+// let port = 3000;
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`)
+// })
 
 module.exports = app;
