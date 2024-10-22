@@ -52,7 +52,7 @@ app.get('/todos', (req, res) => {
   res.json(todos);
 })
 
-app.get('/todos/:id', (req, res) => {
+app.get('/todos/:id', (req, res) => {    //app.get() is sync code it just registers route and callback like a hashmap
   let id = req.params.id;
   let index= findTodo(id);
   if(index != -1){
@@ -104,7 +104,7 @@ function findTodo(id){
 }
 // let port = 3000;
 // app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`)
+//   console.log(`Example app listening on port ${port}`)  //this is the async bit internally it calls async apis
 // })
 
 module.exports = app;
