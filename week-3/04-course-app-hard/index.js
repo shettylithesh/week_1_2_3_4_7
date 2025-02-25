@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 // import { v4 as uuidv4 } from 'uuid';
 const { v4: uuidv4 } = require('uuid');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 var jwt = require('jsonwebtoken');
 
 
@@ -166,8 +167,6 @@ function Hash(password){
 }
 
 //  DB connection
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const password = "mBETp6ZeWgEYBoiH"
 const uri = `mongodb+srv://litheshshetty:${password}@cluster0.ieiik.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -293,6 +292,6 @@ async function getCourseById(courseId) {
 
 
 app.listen(3000, () => {
-  console.log('Server is listening on port 3000');
+  console.log('Course-sell Server is listening on port 3000');
 });
 
